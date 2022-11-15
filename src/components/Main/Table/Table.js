@@ -18,8 +18,9 @@ const Table = (props) => {
 
   const [tableData, setTableData] = useState(data.slice(0, 5));
 
-  const employeeDropDownHandler = (e) => {
-    const employeeRole = e.target.value;
+  const employeeDropDownHandler = (selectedValue) => {
+    const employeeRole = selectedValue;
+    console.log(employeeRole);
     setEmployeeDropDownValue(employeeRole);
     if (employeeRole === "janitor") {
       setTableData(janitorData.slice(0, 5));

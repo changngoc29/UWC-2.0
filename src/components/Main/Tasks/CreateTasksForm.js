@@ -1,4 +1,10 @@
 import React, { useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUsers,
+  faTruck,
+  faMapLocation,
+} from "@fortawesome/free-solid-svg-icons";
 
 const CreateTasksForm = (props) => {
   const submitTaskFormHandler = (e) => {
@@ -11,6 +17,7 @@ const CreateTasksForm = (props) => {
       employee: {
         fullName: employeeFullNameInputRef.current.value,
         ID: employeeIDInputRef.current.value,
+        role: employeeRoleInputRef.current.value,
       },
       vehicle: {
         name: vehiclesNameInputRef.current.value,
@@ -30,8 +37,14 @@ const CreateTasksForm = (props) => {
 
   return (
     <form onSubmit={submitTaskFormHandler}>
+      <h1 className="font-sans text-center text-[1.5rem] font-bold text-[#fe8a7d]">
+        CREATE TASK FORM
+      </h1>
       <div className="mb-3">
-        <h2 className="border-b-2 border-b-slate-400 px-2">MCPs</h2>
+        <h2 className="font-bold text-gray-700 border-b-2 border-b-slate-400 py-2">
+          <FontAwesomeIcon className="pr-2" icon={faMapLocation} />
+          MCPs
+        </h2>
         <input
           required
           ref={MCPsLocationInputRef}
@@ -40,8 +53,9 @@ const CreateTasksForm = (props) => {
         />
       </div>
       <div className="mb-3">
-        <h2 className="border-b-2 border-b-slate-400 px-2">
-          Janitors/Collectors
+        <h2 className="font-bold text-gray-700 border-b-2 border-b-slate-400 py-2">
+          <FontAwesomeIcon className="pr-2" icon={faUsers} />
+          Employee
         </h2>
         <input
           required
@@ -63,7 +77,10 @@ const CreateTasksForm = (props) => {
         />
       </div>
       <div className="mb-3">
-        <h2 className="border-b-2 border-b-slate-400 px-2">Vehicles</h2>
+        <h2 className="font-bold text-gray-700 border-b-2 border-b-slate-400 py-2">
+          <FontAwesomeIcon className="pr-2" icon={faTruck} />
+          Vehicles
+        </h2>
         <input
           required
           ref={vehiclesNameInputRef}

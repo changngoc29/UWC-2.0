@@ -4,6 +4,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../../UI/Modal";
 import CreateTasksForm from "./CreateTasksForm";
 import { tasksList } from "../../../DummyData";
+import TaskItem from "./TaskItem";
 
 const Tasks = () => {
   const [createTask, setCreateTask] = useState(false);
@@ -18,20 +19,21 @@ const Tasks = () => {
   };
 
   const createTaskHandler = (taskInfo) => {
-    console.log(taskInfo);
+    tasksList.push(taskInfo);
+    setTasks([...tasksList]);
   };
 
   const deleteTaskHandler = () => {};
 
   return (
     <Fragment>
-      <div className="mt-[6rem] w-[80%] md:w-[75%] mx-auto p-2 bg-gray-50 rounded-md shadow">
+      <div className="mt-[6rem] w-[80%] md:w-[65%] mx-auto p-2 rounded-md shadow">
         <div
           onClick={openModalHandler}
-          className="bg-blue-500 text-white inline-block p-2 rounded-md font-bold cursor-pointer"
+          className="text-slate-500 inline-block p-1.5 rounded-md cursor-pointer border-2 border-slate-300"
         >
-          <span className="pr-2">Add Task</span>
-          <FontAwesomeIcon icon={faPlus} />
+          <FontAwesomeIcon className="text-[0.75rem]" icon={faPlus} />
+          <span className="pl-2">Add Task</span>
         </div>
       </div>
       {createTask && (
@@ -42,6 +44,10 @@ const Tasks = () => {
           />
         </Modal>
       )}
+      {tasks.length > 0 &&
+        tasks.map((task, index) => {
+          return <TaskItem key={index} task={task} />;
+        })}
     </Fragment>
   );
 };

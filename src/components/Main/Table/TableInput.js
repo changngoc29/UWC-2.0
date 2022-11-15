@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const TableInput = (props) => {
   const { category } = props;
+  const [isShowDropDown, setShowDropDown] = useState(false);
+
+  const dropDownValueHandler = (selectedValue) => {
+    props.onChangeDropDown(selectedValue);
+    setShowDropDown(false);
+  };
+
   return (
     <div className="bg-white mx-auto mb-3 w-[90%] lg:w-[85%] justify-between flex flex-wrap gap-2">
-      <div className="rounded-md shadow w-full md:w-[40%] flex items-center justify-evenly">
+      <div className="rounded-md shadow w-full md:w-[40%] flex items-center justify-around">
         <FontAwesomeIcon
           className="text-slate-400 text-[1.2rem] px-2"
           icon={faSearch}
@@ -26,16 +33,38 @@ const TableInput = (props) => {
         </button>
       </div>
       {category === "employee" && (
-        <div className="flex gap-2 w-full md:w-[20%]">
-          <select
-            onChange={props.onChangeDropDown}
-            id="roles"
-            className="bg-[#263544] text-white rounded-md shadow block w-full py-2 px-3"
+        <div className="relative w-full md:w-[30%] items-center">
+          <button
+            onClick={() => {
+              setShowDropDown((prev) => !prev);
+            }}
+            className="w-full h-full flex jus text-white bg-[#263544] focus:outline-none font-medium rounded-md text-sm px-4 py-2 justify-between items-center"
           >
-            <option value="all">All</option>
-            <option value="janitor">Janitor</option>
-            <option value="collector">Collector</option>
-          </select>
+            Filter
+            <FontAwesomeIcon className="pl-2" icon={faChevronDown} />
+          </button>
+          {isShowDropDown && (
+            <ul className="px-2 py-2 w-full absolute top-[46px] rounded-md shadow bg-white">
+              <li
+                onClick={dropDownValueHandler.bind(null, "all")}
+                className="py-2 hover:bg-slate-200 cursor-pointer"
+              >
+                Employee
+              </li>
+              <li
+                onClick={dropDownValueHandler.bind(null, "janitor")}
+                className="py-2 hover:bg-slate-200 cursor-pointer border-y-[1px] border-slate-200"
+              >
+                Janitor
+              </li>
+              <li
+                onClick={dropDownValueHandler.bind(null, "collector")}
+                className="py-2 hover:bg-slate-200 cursor-pointer"
+              >
+                Collector
+              </li>
+            </ul>
+          )}
         </div>
       )}
     </div>

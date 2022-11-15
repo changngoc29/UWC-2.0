@@ -32,7 +32,7 @@ const MCPs = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 bg-gray-50 rounded-md shadow">
         <div className="m-2">
-          <h1 className="p-2 tracking-wider mb-2 font-bold border-t-2 border-orange-500 text-orange-500">
+          <h1 className="p-2 tracking-wider mb-2 font-bold text-lg border-t-2 border-orange-700 text-orange-700">
             Empty <span className="text-gray-400">{`(2)`}</span>
           </h1>
           {emptyMCPs.map((MCP, index) => {
@@ -40,7 +40,7 @@ const MCPs = () => {
           })}
         </div>
         <div className="m-2">
-          <h1 className="p-2 tracking-wider mb-2 font-bold border-t-2 border-purple-500 text-purple-500">
+          <h1 className="p-2 tracking-wider mb-2 font-bold text-lg border-t-2 border-purple-700 text-purple-700">
             Full <span className="text-gray-400">{`(3)`}</span>
           </h1>
           {fullMCPs.map((MCP, index) => {
@@ -48,7 +48,7 @@ const MCPs = () => {
           })}
         </div>
         <div className="m-2">
-          <h1 className="p-2 tracking-wider mb-2 font-bold border-t-2 border-green-500 text-green-500">
+          <h1 className="p-2 tracking-wider mb-2 font-bold text-lg border-t-2 border-green-700 text-green-700">
             In Progress <span className="text-gray-400">{`(4)`}</span>
           </h1>
           {progressMCPs.map((MCP, index) => {
