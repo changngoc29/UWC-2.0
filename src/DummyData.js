@@ -235,5 +235,3 @@ export const MCPsData = [
     img: "https://lp-cms-production.imgix.net/2019-06/c9fa556810d60b531e7ccaf3222a711c-jade-emperor-pagoda.jpg",
   },
 ];
-
-export const tasksList = [];

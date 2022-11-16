@@ -12,7 +12,7 @@ const TableInput = (props) => {
   };
 
   return (
-    <div className="bg-white mx-auto mb-3 w-[90%] lg:w-[85%] justify-between flex flex-wrap gap-2">
+    <div className="bg-white mx-auto mb-3 w-[90%] lg:w-[85%] justify-between flex flex-wrap gap-2 p-2 shadow">
       <div className="rounded-md shadow w-full md:w-[40%] flex items-center justify-around">
         <FontAwesomeIcon
           className="text-slate-400 text-[1.2rem] px-2"
@@ -28,7 +28,7 @@ const TableInput = (props) => {
               : ""
           }`}
         />
-        <button className="bg-blue-500 text-white p-1 m-1 rounded-md w-[30%] overflow-hidden whitespace-nowrap">
+        <button className="bg-[#263544] text-white p-1 m-1 rounded-md w-[30%] overflow-hidden whitespace-nowrap">
           Search
         </button>
       </div>

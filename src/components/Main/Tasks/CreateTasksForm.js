@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUsers,
@@ -7,23 +7,43 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const CreateTasksForm = (props) => {
+  const [taskFormRole, setTaskFormRol] = useState("collector");
+
   const submitTaskFormHandler = (e) => {
     console.log("success");
     e.preventDefault();
-    props.onCreateTask({
+
+    let taskInfo = {
       MCP: {
         MCPLocation: MCPsLocationInputRef.current.value,
       },
       employee: {
         fullName: employeeFullNameInputRef.current.value,
         ID: employeeIDInputRef.current.value,
-        role: employeeRoleInputRef.current.value,
+        role: taskFormRole,
       },
-      vehicle: {
-        name: vehiclesNameInputRef.current.value,
-        licensePalate: licensePlateInputRef.current.value,
-      },
-    });
+      id: Math.random(),
+    };
+
+    if (taskFormRole === "collector") {
+      taskInfo = {
+        MCP: {
+          MCPLocation: MCPsLocationInputRef.current.value,
+        },
+        employee: {
+          fullName: employeeFullNameInputRef.current.value,
+          ID: employeeIDInputRef.current.value,
+          role: taskFormRole,
+        },
+        vehicle: {
+          name: vehiclesNameInputRef.current.value,
+          licensePalate: licensePlateInputRef.current.value,
+        },
+        id: Math.random(),
+      };
+    }
+
+    props.onCreateTask(taskInfo);
 
     props.onCloseModal();
   };
@@ -31,15 +51,30 @@ const CreateTasksForm = (props) => {
   const MCPsLocationInputRef = useRef();
   const employeeFullNameInputRef = useRef();
   const employeeIDInputRef = useRef();
-  const employeeRoleInputRef = useRef();
   const vehiclesNameInputRef = useRef();
   const licensePlateInputRef = useRef();
 
   return (
     <form onSubmit={submitTaskFormHandler}>
       <h1 className="font-sans text-center text-[1.5rem] font-bold text-[#fe8a7d]">
-        CREATE TASK FORM
+        {taskFormRole.toUpperCase()} TASK FORM
       </h1>
+      <p className="text-[0.75rem] text-gray-500 text-center">
+        Create task for{" "}
+        <span
+          onClick={() => setTaskFormRol("janitor")}
+          className="font-bold text-black hover:underline cursor-pointer underline-offset-2"
+        >
+          JANITOR
+        </span>{" "}
+        or{" "}
+        <span
+          onClick={() => setTaskFormRol("collector")}
+          className="font-bold text-black hover:underline cursor-pointer underline-offset-2"
+        >
+          COLLECTOR
+        </span>
+      </p>
       <div className="mb-3">
         <h2 className="font-bold text-gray-700 border-b-2 border-b-slate-400 py-2">
           <FontAwesomeIcon className="pr-2" icon={faMapLocation} />
@@ -69,35 +104,31 @@ const CreateTasksForm = (props) => {
           className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
           placeholder="Employee ID"
         />
-        <input
-          required
-          ref={employeeRoleInputRef}
-          className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
-          placeholder="Role"
-        />
       </div>
-      <div className="mb-3">
-        <h2 className="font-bold text-gray-700 border-b-2 border-b-slate-400 py-2">
-          <FontAwesomeIcon className="pr-2" icon={faTruck} />
-          Vehicles
-        </h2>
-        <input
-          required
-          ref={vehiclesNameInputRef}
-          className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
-          placeholder="Vehicles Name"
-        />
-        <input
-          required
-          ref={licensePlateInputRef}
-          className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
-          placeholder="License Plate"
-        />
-      </div>
+      {taskFormRole === "collector" && (
+        <div className="mb-3">
+          <h2 className="font-bold text-gray-700 border-b-2 border-b-slate-400 py-2">
+            <FontAwesomeIcon className="pr-2" icon={faTruck} />
+            Vehicle
+          </h2>
+          <input
+            required
+            ref={vehiclesNameInputRef}
+            className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
+            placeholder="Vehicle Name"
+          />
+          <input
+            required
+            ref={licensePlateInputRef}
+            className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
+            placeholder="License Plate"
+          />
+        </div>
+      )}
       <div className="flex justify-end">
         <button
           type="submit"
-          className="p-2 bg-blue-500 text-white font-bold rounded-md shadow"
+          className="p-2 bg-[#263544] text-white font-medium rounded-md shadow"
         >
           Confirm
         </button>
