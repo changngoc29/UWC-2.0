@@ -48,53 +48,51 @@ const OptimizedRoutes = () => {
   return (
     <div className="h-[100vh] mx-auto rounded-md shadow relative z-0 mt-[4rem]">
       <div className="absolute z-10 bg-white shadow p-2 rounded-md top-[1%] left-[1%] right-[1%] bg-opacity-40">
-        <div className="flex justify-between px-2 gap-2 flex-wrap mb-2">
-          <div className="flex gap-2 flex-1 flex-wrap">
-            <Autocomplete className="flex gap-2 flex-1">
-              <input
-                ref={headquarterRef}
-                className="p-2 focus:outline-blue-400 shadow rounded-md w-full"
-                placeholder="Headquarter"
-              />
-            </Autocomplete>
-            <Autocomplete className="flex gap-2 flex-1">
-              <input
-                ref={MCPRef}
-                className="p-2 focus:outline-blue-400 shadow rounded-md w-full"
-                placeholder="MCPs"
-              />
-            </Autocomplete>
-          </div>
-          <div className="flex gap-2 w-[40%]">
-            <button
-              onClick={calculateRoute}
-              className="bg-[#263544] text-white font-bold p-2 rounded-md shadow flex-1 whitespace-nowrap overflow-hidden"
-            >
-              Optimized Route
-            </button>
-            <div
-              onClick={clearRoute}
-              className="flex justify-center items-center w-[50px] h-[50px] text-[1.5rem] p-2 bg-opacity-60 bg-red-200 rounded-[50%] text-red-800 z-10 cursor-pointer"
-            >
-              <FontAwesomeIcon icon={faXmark} />
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-between px-2">
-          <span className="flex items-center font-bold pl-2">
-            {`Distance: ${distance}`}
-          </span>
-          <span className="flex items-center font-bold">
-            {`Duration: ${duration}`}
-          </span>
-          <div
-            onClick={() => {
-              map.panTo(center);
-              map.setZoom(15);
-            }}
-            className="flex justify-center items-center w-[50px] h-[50px] text-[1.5rem] p-2 bg-opacity-60 bg-blue-200 rounded-[50%] text-blue-800 z-10 cursor-pointer"
+        <div className="flex justify-between flex-wrap gap-2">
+          <Autocomplete className="md:w-1/3 w-full">
+            <input
+              ref={headquarterRef}
+              className="p-2 focus:outline-blue-400 shadow rounded-md w-full"
+              placeholder="Headquarter"
+            />
+          </Autocomplete>
+          <Autocomplete className="md:w-1/3 w-full">
+            <input
+              ref={MCPRef}
+              className="p-2 focus:outline-blue-400 shadow rounded-md w-full"
+              placeholder="MCPs"
+            />
+          </Autocomplete>
+          <button
+            onClick={calculateRoute}
+            className="bg-[#263544] text-white font-bold p-2 rounded-md shadow flex-1 whitespace-nowrap overflow-hidden md:w-1/3 w-full"
           >
-            <FontAwesomeIcon icon={faLocationArrow} />
+            Optimized Route
+          </button>
+        </div>
+        <div className="flex gap-3 justify-between mt-2">
+          <div className="flex px-2 w-1/2 justify-between gap-10">
+            <span className="flex items-center font-bold pl-2">
+              {`Distance: ${distance}`}
+            </span>
+            <span className="flex items-center font-bold">
+              {`Duration: ${duration}`}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <FontAwesomeIcon
+              onClick={clearRoute}
+              className="flex justify-center items-center w-[30px] h-[30px] text-[1.5rem] p-2 bg-opacity-60 bg-red-200 rounded-[50%] text-red-800 z-10 cursor-pointer"
+              icon={faXmark}
+            />
+            <FontAwesomeIcon
+              onClick={() => {
+                map.panTo(center);
+                map.setZoom(15);
+              }}
+              className="flex justify-center items-center w-[30px] h-[30px] text-[1.5rem] p-2 bg-opacity-60 bg-blue-200 rounded-[50%] text-blue-800 z-10 cursor-pointer"
+              icon={faLocationArrow}
+            />
           </div>
         </div>
       </div>
