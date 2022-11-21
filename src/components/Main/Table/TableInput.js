@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import SearchInput from "../../UI/SearchInput";
 
 const TableInput = (props) => {
   const { category } = props;
@@ -13,25 +14,7 @@ const TableInput = (props) => {
 
   return (
     <div className="bg-white mx-auto mb-3 w-[90%] lg:w-[85%] justify-between flex flex-wrap gap-2 p-2 shadow">
-      <div className="rounded-md shadow w-full md:w-[40%] flex items-center justify-around">
-        <FontAwesomeIcon
-          className="text-slate-400 text-[1.2rem] px-2"
-          icon={faSearch}
-        />
-        <input
-          className="focus:outline-none flex-1 md:flex-none md:w-[45%]"
-          placeholder={`${
-            category === "employee"
-              ? "Search for employee"
-              : category === "vehicles"
-              ? "Search for vehicles"
-              : ""
-          }`}
-        />
-        <button className="bg-[#263544] text-white p-1 m-1 rounded-md w-[30%] overflow-hidden whitespace-nowrap">
-          Search
-        </button>
-      </div>
+      <SearchInput category={category} />
       {category === "employee" && (
         <div className="relative w-full md:w-[30%] items-center">
           <button

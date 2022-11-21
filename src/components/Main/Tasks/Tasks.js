@@ -3,7 +3,8 @@ import Modal from "../../UI/Modal";
 import TaskItem from "./TaskItem";
 import CreateTasksForm from "./CreateTasksForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardCheck, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
+import SearchInput from "../../UI/SearchInput";
 
 const Tasks = () => {
   const [createTask, setCreateTask] = useState(false);
@@ -30,19 +31,7 @@ const Tasks = () => {
   return (
     <Fragment>
       <div className="mt-[6rem] w-[80%] md:w-[65%] mx-auto p-2 flex justify-between shadow flex-wrap gap-2">
-        <div className="w-full md:w-[300px] flex items-center justify-around rounded-md shadow">
-          <FontAwesomeIcon
-            className="text-slate-400 text-[1.2rem] px-2"
-            icon={faSearch}
-          />
-          <input
-            className="focus:outline-none flex-1 md:flex-none md:w-[45%]"
-            placeholder="Search for tasks"
-          />
-          <button className="bg-[#263544] text-white p-1 m-1 rounded-md w-[30%] overflow-hidden whitespace-nowrap">
-            Search
-          </button>
-        </div>
+        <SearchInput category="tasks" />
         <div
           onClick={openModalHandler}
           className="w-full md:w-fit text-slate-500 inline-block p-1.5 cursor-pointer border-2 border-slate-400 shadow line-clamp-1"
@@ -69,9 +58,9 @@ const Tasks = () => {
           );
         })}
       {tasks.length === 0 && (
-        <div className="text-center mt-10">
+        <div className="text-center mt-20">
           <FontAwesomeIcon
-            className="text-blue-400 text-[15rem]"
+            className="text-slate-400 text-[15rem]"
             icon={faClipboardCheck}
           />
           <p className="font-bold text-[1.5rem] mt-3">NO TASK FOUND</p>
