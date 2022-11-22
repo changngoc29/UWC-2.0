@@ -1,58 +1,71 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUsers,
   faTruck,
   faMapLocation,
 } from "@fortawesome/free-solid-svg-icons";
+import { employeeData, MCPsData, vehiclesData } from "../../../DummyData";
+
+const availableVehicles = vehiclesData.filter((vehicle) => {
+  return vehicle.status === "available";
+});
+
+const MCPsFull = MCPsData.filter((MCP) => {
+  return MCP.status === "full";
+});
+
+const MCPsEmpty = MCPsData.filter((MCP) => {
+  return MCP.status === "empty";
+});
+
+const availableJanitor = employeeData.filter((employee) => {
+  return employee.status === "available" && employee.role === "janitor";
+});
+
+const availableCollector = employeeData.filter((employee) => {
+  return employee.status === "available" && employee.role === "collector";
+});
 
 const CreateTasksForm = (props) => {
   const [taskFormRole, setTaskFormRol] = useState("collector");
+  const [MCPsOptionValue, setMCPsOptionValue] = useState(null);
+  const [employeeOptionValue, setemployeeOptionValue] = useState(null);
+  const [vehicleOption, setVehicleOption] = useState(null);
 
   const submitTaskFormHandler = (e) => {
-    console.log("success");
     e.preventDefault();
+    if (!MCPsOptionValue && !employeeOptionValue && !vehicleOption) return;
 
     let taskInfo = {
       MCP: {
-        MCPLocation: MCPsLocationInputRef.current.value,
+        MCPLocation:
+          taskFormRole === "collector"
+            ? MCPsFull[MCPsOptionValue].location
+            : MCPsEmpty[MCPsOptionValue].location,
       },
       employee: {
-        fullName: employeeFullNameInputRef.current.value,
-        ID: employeeIDInputRef.current.value,
         role: taskFormRole,
+        fullName:
+          taskFormRole === "collector"
+            ? availableCollector[employeeOptionValue].name
+            : availableJanitor[employeeOptionValue].name,
+        ID:
+          taskFormRole === "collector"
+            ? availableCollector[employeeOptionValue].id
+            : availableJanitor[employeeOptionValue].id,
+      },
+      vehicle: {
+        name: availableVehicles[vehicleOption]?.name,
+        licensePalate: availableVehicles[vehicleOption]?.id,
       },
       id: Math.random(),
     };
-
-    if (taskFormRole === "collector") {
-      taskInfo = {
-        MCP: {
-          MCPLocation: MCPsLocationInputRef.current.value,
-        },
-        employee: {
-          fullName: employeeFullNameInputRef.current.value,
-          ID: employeeIDInputRef.current.value,
-          role: taskFormRole,
-        },
-        vehicle: {
-          name: vehiclesNameInputRef.current.value,
-          licensePalate: licensePlateInputRef.current.value,
-        },
-        id: Math.random(),
-      };
-    }
 
     props.onCreateTask(taskInfo);
 
     props.onCloseModal();
   };
-
-  const MCPsLocationInputRef = useRef();
-  const employeeFullNameInputRef = useRef();
-  const employeeIDInputRef = useRef();
-  const vehiclesNameInputRef = useRef();
-  const licensePlateInputRef = useRef();
 
   return (
     <form onSubmit={submitTaskFormHandler}>
@@ -80,49 +93,99 @@ const CreateTasksForm = (props) => {
           <FontAwesomeIcon className="pr-2" icon={faMapLocation} />
           MCPs
         </h2>
-        <input
+        <select
+          defaultValue={`Select ${
+            taskFormRole === "collector" ? "full" : "empty"
+          } MCPs`}
           required
-          ref={MCPsLocationInputRef}
+          onChange={(e) => {
+            setMCPsOptionValue(e.currentTarget.value);
+          }}
           className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
-          placeholder="MCP location"
-        />
+        >
+          <option disabled className="bg-slate-400 text-white">
+            Select {taskFormRole === "collector" ? "full" : "empty"} MCPs
+          </option>
+          {taskFormRole === "collector" &&
+            MCPsFull.map((MCP, index) => {
+              return (
+                <option value={index} key={index}>
+                  {MCP.location}
+                </option>
+              );
+            })}
+          {taskFormRole === "janitor" &&
+            MCPsEmpty.map((MCP, index) => {
+              return (
+                <option value={index} key={index}>
+                  {MCP.location}
+                </option>
+              );
+            })}
+        </select>
       </div>
       <div className="mb-3">
         <h2 className="font-bold text-gray-700 border-b-2 border-b-slate-400 py-2">
           <FontAwesomeIcon className="pr-2" icon={faUsers} />
-          Employee
+          {taskFormRole.toUpperCase()}
         </h2>
-        <input
+        <select
+          defaultValue={`Select available ${taskFormRole}`}
           required
-          ref={employeeFullNameInputRef}
+          onChange={(e) => {
+            setemployeeOptionValue(e.currentTarget.value);
+          }}
           className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
-          placeholder="Full Name"
-        />
-        <input
-          required
-          ref={employeeIDInputRef}
-          className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
-          placeholder="Employee ID"
-        />
+        >
+          <option disabled className="bg-slate-400 text-white">
+            Select available {taskFormRole}
+          </option>
+          {taskFormRole === "collector" &&
+            availableCollector.map((employee, index) => {
+              return (
+                <option
+                  value={index}
+                  key={index}
+                >{`${employee.name}, ${employee.id}`}</option>
+              );
+            })}
+          {taskFormRole === "janitor" &&
+            availableJanitor.map((employee, index) => {
+              return (
+                <option
+                  value={index}
+                  key={index}
+                >{`${employee.name}, ${employee.id}`}</option>
+              );
+            })}
+        </select>
       </div>
       {taskFormRole === "collector" && (
         <div className="mb-3">
           <h2 className="font-bold text-gray-700 border-b-2 border-b-slate-400 py-2">
             <FontAwesomeIcon className="pr-2" icon={faTruck} />
-            Vehicle
+            VEHICLE
           </h2>
-          <input
+          <select
+            defaultValue="Select available vehicle"
             required
-            ref={vehiclesNameInputRef}
+            onChange={(e) => {
+              setVehicleOption(e.currentTarget.value);
+            }}
             className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
-            placeholder="Vehicle Name"
-          />
-          <input
-            required
-            ref={licensePlateInputRef}
-            className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
-            placeholder="License Plate"
-          />
+          >
+            <option disabled className="bg-slate-400 text-white">
+              Select available vehicle
+            </option>
+            {availableVehicles.map((vehicle, index) => {
+              return (
+                <option
+                  value={index}
+                  key={index}
+                >{`${vehicle.name}, ${vehicle.id}`}</option>
+              );
+            })}
+          </select>
         </div>
       )}
       <div className="flex justify-end">

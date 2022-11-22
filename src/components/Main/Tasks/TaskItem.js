@@ -70,11 +70,11 @@ const TaskItem = (props) => {
             </p>
           </div>
           <div className="flex flex-wrap justify-between py-1">
-            <p>Vehicle Name: {vehicle ? vehicle?.name : "Not Assigned"}</p>
+            <p>Vehicle Name: {vehicle.name ? vehicle.name : "Not Assigned"}</p>
             <p>
               License Palate:{" "}
               <span className="font-bold text-blue-400">{`#${
-                vehicle ? vehicle.licensePalate : "NULL"
+                vehicle.licensePalate ? vehicle.licensePalate : "NULL"
               }`}</span>
             </p>
           </div>
