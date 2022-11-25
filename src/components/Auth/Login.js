@@ -6,12 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faEnvelope, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
-  const [roleLoginForm, setRoleLoginForm] = useState("ADMIN");
+  const [roleLoginForm, setRoleLoginForm] = useState("BACKOFFICER");
   const navigate = useNavigate();
   const submitHandler = (e) => {
     e.preventDefault();
 
-    navigate("/admin");
+    if (roleLoginForm === "BACKOFFICER") navigate("/backofficer");
+    else if (roleLoginForm === "EMPLOYEE") navigate("/employee");
   };
 
   return (
@@ -73,20 +74,8 @@ const Login = () => {
               setRoleLoginForm(`${e.target.childNodes[0].data.toUpperCase()}`);
             }}
           >
-            {roleLoginForm === "ADMIN" && "JANITOR"}
-            {roleLoginForm === "JANITOR" && "ADMIN"}
-            {roleLoginForm === "COLLECTOR" && "JANITOR"}
-          </span>
-          <span className="px-1">or</span>
-          <span
-            className="text-[#263544] font-bold text-md hover:underline hover:cursor-pointer underline-offset-2"
-            onClick={(e) => {
-              setRoleLoginForm(`${e.target.childNodes[0].data.toUpperCase()}`);
-            }}
-          >
-            {roleLoginForm === "ADMIN" && "COLLECTOR"}
-            {roleLoginForm === "JANITOR" && "COLLECTOR"}
-            {roleLoginForm === "COLLECTOR" && "ADMIN"}
+            {roleLoginForm === "BACKOFFICER" && "EMPLOYEE"}
+            {roleLoginForm === "EMPLOYEE" && "BACKOFFICER"}
           </span>
         </p>
         <div className="mt-3 border-t border-t-gray-200"></div>

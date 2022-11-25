@@ -7,7 +7,7 @@ const BreadCrumb = (props) => {
     <div className="bg-white h-10 flex items-center font-semibold text-gray-800 whitespace-nowrap">
       <FontAwesomeIcon icon={faHouse} />
       <span className="px-2">/</span>
-      <span>Admin</span>
+      <span>{props.role}</span>
       <span className="px-2">/</span>
       <span>{props.currentData}</span>
     </div>

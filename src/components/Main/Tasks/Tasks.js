@@ -4,11 +4,17 @@ import TaskItem from "./TaskItem";
 import CreateTasksForm from "./CreateTasksForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
-import SearchInput from "../../UI/SearchInput";
+import { useDispatch, useSelector } from "react-redux";
+import { usersAction } from "../../../Store/usersData";
+import { MCPssAction } from "../../../Store/mcpsData";
+import { vehiclesAction } from "../../../Store/vehicleData";
+import { tasksAction } from "../../../Store/tasksList";
 
 const Tasks = () => {
   const [createTask, setCreateTask] = useState(false);
-  const [tasks, setTasks] = useState([]);
+  const dispatch = useDispatch();
+  const allTasks = useSelector((state) => state.tasks.allTasks);
+  console.log(allTasks);
 
   const closeModalHandler = () => {
     setCreateTask(false);
@@ -19,22 +25,42 @@ const Tasks = () => {
   };
 
   const createTaskHandler = (taskInfo) => {
-    const newTasks = [taskInfo, ...tasks];
-    setTasks(newTasks);
+    dispatch(tasksAction.addTasks(taskInfo));
   };
 
-  const deleteTaskHandler = (id) => {
-    const newTasks = tasks.filter((task) => task.id !== id);
-    setTasks(newTasks);
+  const deleteTaskHandler = (deleteTask) => {
+    dispatch(tasksAction.deleteTask(deleteTask.id));
+
+    dispatch(
+      usersAction.updateUserStatus({
+        id: deleteTask.employee.ID,
+        status: "Available",
+      })
+    );
+
+    if (deleteTask.employee.role === "janitor") {
+      dispatch(
+        MCPssAction.updateMCPsStatus({ id: deleteTask.MCP.ID, status: "empty" })
+      );
+    } else if (deleteTask.employee.role === "collector") {
+      dispatch(
+        MCPssAction.updateMCPsStatus({ id: deleteTask.MCP.ID, status: "full" })
+      );
+      dispatch(
+        vehiclesAction.updateVehiclesStatus({
+          id: deleteTask.vehicle.ID,
+          status: "available",
+        })
+      );
+    }
   };
 
   return (
     <Fragment>
       <div className="mt-[6rem] w-[80%] md:w-[65%] mx-auto p-2 flex justify-between shadow flex-wrap gap-2">
-        <SearchInput category="tasks" />
         <div
           onClick={openModalHandler}
-          className="w-full md:w-fit text-slate-500 inline-block p-1.5 cursor-pointer border-2 border-slate-400 shadow line-clamp-1"
+          className="w-full md:w-fit text-[#263544] inline-block p-1.5 cursor-pointer border-2 border-[#263544] shadow line-clamp-1"
         >
           Add Task
         </div>
@@ -47,17 +73,17 @@ const Tasks = () => {
           />
         </Modal>
       )}
-      {tasks.length > 0 &&
-        tasks.map((task, index) => {
+      {allTasks.length > 0 &&
+        allTasks.map((task, index) => {
           return (
             <TaskItem
               key={index}
               task={task}
-              onDeleteTask={deleteTaskHandler.bind(null, task.id)}
+              onDeleteTask={deleteTaskHandler.bind(null, task)}
             />
           );
         })}
-      {tasks.length === 0 && (
+      {allTasks.length === 0 && (
         <div className="text-center mt-20">
           <FontAwesomeIcon
             className="text-slate-400 text-[15rem]"

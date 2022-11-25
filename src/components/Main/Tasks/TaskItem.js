@@ -5,19 +5,20 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 const TaskItem = (props) => {
-  const { task, id } = props;
-  const { MCP, employee, vehicle } = task;
+  const { task } = props;
+  console.log(task);
+  const { MCP, employee, vehicle, status } = task;
 
   const [isShowDetail, setIsShowDetail] = useState(false);
 
   return (
-    <div className="w-[80%] md:w-[65%] mx-auto mt-3 p-3 shadow border-l-[4px] border-red-800">
+    <div className="w-[80%] md:w-[65%] mx-auto mt-3 p-3 shadow border-l-[4px] border-yellow-500">
       <div className="flex justify-between">
         <span className="font-bold flex items-end">
           {employee.role.toUpperCase()}
         </span>
-        <p className="tracking-wider text-[0.75rem] font-sans p-1.5 rounded-lg font-bold text-red-800 bg-red-200 bg-opacity-50">
-          Not Check In
+        <p className="tracking-wider text-[0.75rem] font-sans p-1.5 rounded-lg font-bold text-yellow-800 bg-yellow-200 bg-opacity-50">
+          {status}
         </p>
       </div>
       <p className="text-gray-500 text-sm my-2 line-clamp-1">{`MCP Location: ${
@@ -36,7 +37,7 @@ const TaskItem = (props) => {
           <FontAwesomeIcon className="pl-2" icon={faArrowRight} />
         </p>
         <FontAwesomeIcon
-          onClick={props.onDeleteTask.bind(null, id)}
+          onClick={props.onDeleteTask}
           className="cursor-pointer pr-2"
           icon={faTrashCan}
         />
@@ -57,8 +58,8 @@ const TaskItem = (props) => {
                 {employee.role.toUpperCase()}
               </span>
             </p>
-            <p className="tracking-wider text-[0.75rem] font-sans p-1.5 rounded-lg font-bold text-red-800 bg-red-200 bg-opacity-50">
-              Not Check In
+            <p className="tracking-wider text-[0.75rem] font-sans p-1.5 rounded-lg font-bold text-yellow-800 bg-yellow-200 bg-opacity-50">
+              Pending
             </p>
           </div>
           <p className="py-1">MCP Location: {MCP.MCPLocation}</p>

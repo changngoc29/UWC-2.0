@@ -1,16 +1,23 @@
 import React, { Fragment } from "react";
+import { useSelector } from "react-redux";
 
 const VehiclesDataTable = (props) => {
   const { singleRowData } = props;
+  const allUsers = useSelector((state) => state.users.allUsers);
+  const insurer = allUsers.find(
+    (user) => user.id === singleRowData["insurer-id"]
+  );
 
   return (
     <Fragment>
       <td className="p-3 whitespace-nowrap font-bold text-blue-400">
-        {`#${singleRowData.id}`}
+        {`#${singleRowData.liscense}`}
       </td>
       <td className="p-3 whitespace-nowrap">{singleRowData.name}</td>
       <td className="p-3 whitespace-nowrap">{singleRowData.vehiclesType}</td>
-      <td className="p-3 whitespace-nowrap">{singleRowData.insurer}</td>
+      <td className="p-3 whitespace-nowrap">
+        {insurer ? insurer.name : "NULL"}
+      </td>
       <td className="p-3 whitespace-nowrap">{singleRowData.area}</td>
       <td className="p-3 whitespace-nowrap">
         <span
@@ -33,15 +40,20 @@ const VehiclesDataTable = (props) => {
 
 export const VehiclesDataCard = (props) => {
   const { singleRowData } = props;
+  const allUsers = useSelector((state) => state.users.allUsers);
+  const insurer = allUsers.find(
+    (user) => user.id === singleRowData["insurer-id"]
+  );
+
   return (
     <div key={singleRowData.id} className="bg-white shadow p-4 rounded-md my-3">
       <div className="flex justify-between flex-wrap">
         <p>{singleRowData.name}</p>
-        <p className="font-bold text-blue-400">{`#${singleRowData.id}`}</p>
+        <p className="font-bold text-blue-400">{`#${singleRowData.liscense}`}</p>
       </div>
       <div className="flex justify-between py-2 flex-wrap">
         <p>{singleRowData.vehiclesType}</p>
-        <p>{singleRowData.insurer}</p>
+        <p>{insurer ? insurer.name : "NULL"}</p>
       </div>
       <div className="flex justify-between">
         <span

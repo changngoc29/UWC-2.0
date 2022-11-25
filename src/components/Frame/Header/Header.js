@@ -12,7 +12,7 @@ const Header = (props) => {
   return (
     <div className="h-[4rem] bg-white shadow-md fixed top-0 right-0 left-[6rem] lg:left-[16rem] z-10">
       <div className="h-full flex items-center w-[90%] lg:w-[85%] mx-auto justify-between">
-        <BreadCrumb currentData={props.currentData} />
+        <BreadCrumb role={props.role} currentData={props.currentData} />
         <div className="relative whitespace-nowrap pl-4">
           <FontAwesomeIcon
             icon={faMessage}

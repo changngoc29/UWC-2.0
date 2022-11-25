@@ -5,37 +5,84 @@ import {
   faTruck,
   faMapLocation,
 } from "@fortawesome/free-solid-svg-icons";
-import { employeeData, MCPsData, vehiclesData } from "../../../DummyData";
-
-const availableVehicles = vehiclesData.filter((vehicle) => {
-  return vehicle.status === "available";
-});
-
-const MCPsFull = MCPsData.filter((MCP) => {
-  return MCP.status === "full";
-});
-
-const MCPsEmpty = MCPsData.filter((MCP) => {
-  return MCP.status === "empty";
-});
-
-const availableJanitor = employeeData.filter((employee) => {
-  return employee.status === "available" && employee.role === "janitor";
-});
-
-const availableCollector = employeeData.filter((employee) => {
-  return employee.status === "available" && employee.role === "collector";
-});
+import { useSelector, useDispatch } from "react-redux";
+import { usersAction } from "../../../Store/usersData";
+import { vehiclesAction } from "../../../Store/vehicleData";
+import { MCPssAction } from "../../../Store/mcpsData";
 
 const CreateTasksForm = (props) => {
   const [taskFormRole, setTaskFormRol] = useState("collector");
   const [MCPsOptionValue, setMCPsOptionValue] = useState(null);
   const [employeeOptionValue, setemployeeOptionValue] = useState(null);
-  const [vehicleOption, setVehicleOption] = useState(null);
+  const [vehicleOptionValue, setVehicleOptionValue] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const allUsers = useSelector((state) => state.users.allUsers);
+  const availableJanitor = allUsers.filter((employee) => {
+    return employee.status === "Available" && employee.role === "janitor";
+  });
+  const availableCollector = allUsers.filter((employee) => {
+    return employee.status === "Available" && employee.role === "collector";
+  });
+
+  const allVehicles = useSelector((state) => state.vehicles.allVehicles);
+  const availableVehicles = allVehicles.filter((vehicle) => {
+    return vehicle.status === "available";
+  });
+
+  const allMCPs = useSelector((state) => state.mcps.allMCPs);
+  const MCPsFull = allMCPs.filter((MCP) => {
+    return MCP.status === "full";
+  });
+  const MCPsEmpty = allMCPs.filter((MCP) => {
+    return MCP.status === "empty";
+  });
 
   const submitTaskFormHandler = (e) => {
     e.preventDefault();
-    if (!MCPsOptionValue && !employeeOptionValue && !vehicleOption) return;
+
+    if (taskFormRole === "collector") {
+      if (!MCPsOptionValue || !employeeOptionValue || !vehicleOptionValue)
+        return;
+
+      dispatch(
+        usersAction.updateUserStatus({
+          id: availableCollector[employeeOptionValue].id,
+          status: "Pending task",
+        })
+      );
+
+      dispatch(
+        MCPssAction.updateMCPsStatus({
+          id: MCPsFull[MCPsOptionValue].id,
+          status: "progress",
+        })
+      );
+
+      dispatch(
+        vehiclesAction.updateVehiclesStatus({
+          id: availableVehicles[vehicleOptionValue].id,
+          status: "pending task",
+        })
+      );
+    } else if (taskFormRole === "janitor") {
+      if (!MCPsOptionValue || !employeeOptionValue) return;
+
+      dispatch(
+        usersAction.updateUserStatus({
+          id: availableJanitor[employeeOptionValue].id,
+          status: "Pending task",
+        })
+      );
+
+      dispatch(
+        MCPssAction.updateMCPsStatus({
+          id: MCPsEmpty[MCPsOptionValue].id,
+          status: "progress",
+        })
+      );
+    }
 
     let taskInfo = {
       MCP: {
@@ -43,6 +90,10 @@ const CreateTasksForm = (props) => {
           taskFormRole === "collector"
             ? MCPsFull[MCPsOptionValue].location
             : MCPsEmpty[MCPsOptionValue].location,
+        ID:
+          taskFormRole === "collector"
+            ? MCPsFull[MCPsOptionValue].id
+            : MCPsEmpty[MCPsOptionValue].id,
       },
       employee: {
         role: taskFormRole,
@@ -56,9 +107,11 @@ const CreateTasksForm = (props) => {
             : availableJanitor[employeeOptionValue].id,
       },
       vehicle: {
-        name: availableVehicles[vehicleOption]?.name,
-        licensePalate: availableVehicles[vehicleOption]?.id,
+        name: availableVehicles[vehicleOptionValue]?.name,
+        licensePalate: availableVehicles[vehicleOptionValue]?.liscense,
+        ID: availableVehicles[vehicleOptionValue]?.id,
       },
+      status: "Pending",
       id: Math.random(),
     };
 
@@ -170,7 +223,7 @@ const CreateTasksForm = (props) => {
             defaultValue="Select available vehicle"
             required
             onChange={(e) => {
-              setVehicleOption(e.currentTarget.value);
+              setVehicleOptionValue(e.currentTarget.value);
             }}
             className="p-2 w-full shadow rounded-md mt-2 focus:outline-blue-400"
           >
@@ -182,7 +235,7 @@ const CreateTasksForm = (props) => {
                 <option
                   value={index}
                   key={index}
-                >{`${vehicle.name}, ${vehicle.id}`}</option>
+                >{`${vehicle.name}, ${vehicle.liscense}`}</option>
               );
             })}
           </select>

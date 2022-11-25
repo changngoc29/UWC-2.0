@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../../UI/Modal";
+import { useSelector } from "react-redux";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 
 const center = { lat: 10.7734137588, lng: 106.659731458 };
@@ -9,6 +10,10 @@ const center = { lat: 10.7734137588, lng: 106.659731458 };
 const MCPsCard = (props) => {
   const { data } = props;
   const [isShowMCPInfo, setIsShowMCPInfo] = useState(false);
+  const allUsers = useSelector((state) => state.users.allUsers);
+  const employeeInCharge = allUsers.find(
+    (user) => user.id === data["employee-id"]
+  );
 
   return (
     <Fragment>
@@ -88,7 +93,7 @@ const MCPsCard = (props) => {
               </p>
               <p>
                 <span className="font-bold">Employee In Charged: </span>
-                {data.employee}
+                {employeeInCharge ? employeeInCharge.name : "Not Assign"}
               </p>
             </div>
           </div>

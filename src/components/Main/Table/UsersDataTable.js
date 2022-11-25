@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-const EmployeeDataTable = (props) => {
+const UsersDataTable = (props) => {
   const { singleRowData } = props;
 
   return (
@@ -10,17 +10,17 @@ const EmployeeDataTable = (props) => {
       </td>
       <td className="p-3 whitespace-nowrap">{singleRowData.name}</td>
       <td className="p-3 whitespace-nowrap">{singleRowData.email}</td>
-      <td className="p-3 whitespace-nowrap">{singleRowData.phoneNumber}</td>
+      <td className="p-3 whitespace-nowrap">{singleRowData.phone}</td>
       <td className="p-3 whitespace-nowrap font-sans text-[0.75rem] tracking-wider font-bold">{`${singleRowData.role.toUpperCase()}`}</td>
       <td className="p-3 whitespace-nowrap">
         <span
           className={`${
-            singleRowData.status === "available" &&
+            singleRowData.status === "Available" &&
             "text-green-800 bg-green-200"
           } ${
-            singleRowData.status === "unavailable" && "text-red-800 bg-red-200"
+            singleRowData.status === "Unavailable" && "text-red-800 bg-red-200"
           } ${
-            singleRowData.status === "pending task" &&
+            singleRowData.status === "Pending task" &&
             "text-yellow-800 bg-yellow-200"
           } p-1.5 font-bold text-center rounded-lg bg-opacity-50 font-sans text-[0.75rem] tracking-wider`}
         >
@@ -31,7 +31,7 @@ const EmployeeDataTable = (props) => {
   );
 };
 
-export const EmployeeDataCard = (props) => {
+export const UsersDataCard = (props) => {
   const { singleRowData } = props;
 
   return (
@@ -42,17 +42,17 @@ export const EmployeeDataCard = (props) => {
       </div>
       <div className="flex justify-between py-2 flex-wrap">
         <p>{singleRowData.email}</p>
-        <p>{singleRowData.phoneNumber}</p>
+        <p>{singleRowData.phone}</p>
       </div>
       <div className="flex justify-between">
         <span
           className={`${
-            singleRowData.status === "available" &&
+            singleRowData.status === "Available" &&
             "text-green-800 bg-green-200"
           } ${
-            singleRowData.status === "unavailable" && "text-red-800 bg-red-200"
+            singleRowData.status === "Unavailable" && "text-red-800 bg-red-200"
           } ${
-            singleRowData.status === "pending task" &&
+            singleRowData.status === "Pending task" &&
             "text-yellow-800 bg-yellow-200"
           } p-1.5 rounded-md text-[0.75rem] tracking-wider uppercase font-bold bg-opacity-50 font-sans`}
         >
@@ -66,4 +66,4 @@ export const EmployeeDataCard = (props) => {
   );
 };
 
-export default EmployeeDataTable;
+export default UsersDataTable;

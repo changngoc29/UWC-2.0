@@ -4,14 +4,9 @@ import Header from "../components/Frame/Header/Header";
 import Table from "../components/Main/Table/Table";
 import OptimizedRoutes from "../components/Main/Map/OptimizedRoutes";
 import MCPs from "../components/Main/MCPs/MCPs";
-import {
-  adminNavItems,
-  employeeInfoDir,
-  employeeData,
-  vehiclesInfoDir,
-  vehiclesData,
-} from "../DummyData";
+import { adminNavItems, usersInfoDir, vehiclesInfoDir } from "../DummyData";
 import Tasks from "../components/Main/Tasks/Tasks";
+import { useSelector } from "react-redux";
 
 const AdminPage = () => {
   const [navItems, setNavItems] = useState([...adminNavItems]);
@@ -20,20 +15,22 @@ const AdminPage = () => {
     setNavItems(newNavItems);
   };
 
+  const usersData = useSelector((state) => state.users.allUsers);
+
+  const vehiclesData = useSelector((state) => state.vehicles.allVehicles);
+
   return (
     <Fragment>
-      {
-        <ColumnNavbar
-          role="ADMIN"
-          navItems={navItems}
-          onUpdateDataStatus={updateNavItemsStatusHandler}
-        />
-      }
+      <ColumnNavbar
+        role="ADMIN"
+        navItems={navItems}
+        onUpdateDataStatus={updateNavItemsStatusHandler}
+      />
       <div className="ml-24 lg:ml-64">
         {navItems.map((navItem, index) => {
           return (
             navItem.isActive && (
-              <Header key={index} currentData={navItem.name} />
+              <Header role="Admin" key={index} currentData={navItem.name} />
             )
           );
         })}
@@ -41,13 +38,13 @@ const AdminPage = () => {
           let content = undefined;
 
           if (navItem.isActive === true) {
-            if (navItem.name === "Employee") {
+            if (navItem.name === "Users") {
               content = (
                 <Table
-                  category="employee"
+                  category="users"
                   key={index}
-                  infoDir={employeeInfoDir}
-                  data={employeeData}
+                  infoDir={usersInfoDir}
+                  data={usersData}
                 />
               );
             } else if (navItem.name === "Optimized Routes") {
