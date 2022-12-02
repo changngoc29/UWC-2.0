@@ -16,6 +16,19 @@ const vehiclesSlice = createSlice({
         (vehicle) => vehicle.id === action.payload.id
       );
       state.allVehicles[vehicleIndex].status = action.payload.status;
+
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: state.allVehicles[vehicleIndex].id,
+          status: state.allVehicles[vehicleIndex].status,
+        }),
+      };
+
+      fetch("http://127.0.0.1:8080/api/tasks/vehicles", requestOptions)
+        .then((response) => response.json())
+        .then((data) => console.log(data));
     },
   },
 });
