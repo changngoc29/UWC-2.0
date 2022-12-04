@@ -4,12 +4,15 @@ import google from "../../assets/img/google.png";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faEnvelope, faEye } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { currentUserAction } from "../../Store/CurrentUser";
 
 const Login = () => {
   const [roleLoginForm, setRoleLoginForm] = useState("BACKOFFICER");
   const [hiddenPassword, setHiddenPassword] = useState(true);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const submitHandler = async (e) => {
@@ -35,6 +38,8 @@ const Login = () => {
       alert("Incorrect email or password");
       return;
     }
+
+    dispatch(currentUserAction.login(userAuthCredentials.id));
 
     if (
       userAuthCredentials.role === "backofficer" &&

@@ -9,11 +9,14 @@ import { getAllMCPs } from "./Store/mcpsData";
 import { getAllVehicles } from "./Store/vehicleData";
 import { getAllTasks } from "./Store/tasksList";
 import EmployeePage from "./pages/EmployeePage";
+import { useSelector } from "react-redux";
 
 const libraries = ["places"];
 
 function App() {
   const dispatch = useDispatch();
+
+  const loginStatus = useSelector((state) => state.currentUser.isLogin);
 
   useJsApiLoader({
     googleMapsApiKey: "AIzaSyAextcUAVctnrK7qDOcjGkpzFXr1AtOnBg",
@@ -29,10 +32,10 @@ function App() {
 
   return (
     <Routes>
-      <Route exact path="/" element={<Navigate to="login" />} />
       <Route path="login" element={<AuthPage />} />
-      <Route path="backofficer" element={<AdminPage />} />
-      <Route path="employee" element={<EmployeePage />} />
+      {loginStatus && <Route path="backofficer" element={<AdminPage />} />}
+      {loginStatus && <Route path="employee" element={<EmployeePage />} />}
+      <Route path="*" element={<Navigate to="login" />} />
     </Routes>
   );
 }

@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from "react";
 import ColumnNavbar from "../components/Frame/Column_Nav/ColumnNavbar";
 import Header from "../components/Frame/Header/Header";
-import Table from "../components/Main/Table/Table";
-import OptimizedRoutes from "../components/Main/Map/OptimizedRoutes";
-import MCPs from "../components/Main/MCPs/MCPs";
+import Table from "../components/Main/Admin/Table/Table";
+import OptimizedRoutes from "../components/Main/Admin/Map/OptimizedRoutes";
+import MCPs from "../components/Main/Admin/MCPs/MCPs";
 import { adminNavItems, usersInfoDir, vehiclesInfoDir } from "../DummyData";
-import Tasks from "../components/Main/Tasks/Tasks";
+import Tasks from "../components/Main/Admin/Tasks/Tasks";
 import { useSelector } from "react-redux";
 
 const AdminPage = () => {

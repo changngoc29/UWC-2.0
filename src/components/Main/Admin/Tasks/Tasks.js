@@ -1,14 +1,14 @@
 import React, { Fragment, useState } from "react";
-import Modal from "../../UI/Modal";
+import Modal from "../../../UI/Modal";
 import TaskItem from "./TaskItem";
 import CreateTasksForm from "./CreateTasksForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { usersAction } from "../../../Store/usersData";
-import { MCPssAction } from "../../../Store/mcpsData";
-import { vehiclesAction } from "../../../Store/vehicleData";
-import { tasksAction } from "../../../Store/tasksList";
+import { usersAction } from "../../../../Store/usersData";
+import { MCPssAction } from "../../../../Store/mcpsData";
+import { vehiclesAction } from "../../../../Store/vehicleData";
+import { tasksAction } from "../../../../Store/tasksList";
 
 const Tasks = () => {
   const [createTask, setCreateTask] = useState(false);

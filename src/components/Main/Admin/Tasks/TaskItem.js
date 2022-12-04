@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "../../UI/Modal";
+import Modal from "../../../UI/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";

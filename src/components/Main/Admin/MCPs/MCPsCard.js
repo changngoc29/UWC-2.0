@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../../UI/Modal";
+import Modal from "../../../UI/Modal";
 import { useSelector } from "react-redux";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 
