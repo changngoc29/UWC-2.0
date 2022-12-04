@@ -1,11 +1,13 @@
+import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AdminPage from "./pages/AdminPage";
 import AuthPage from "./pages/AuthPage";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { useDispatch } from "react-redux";
-import { usersAction } from "./Store/usersData";
-import { MCPssAction } from "./Store/mcpsData";
-import { vehiclesAction } from "./Store/vehicleData";
+import { getAllUsers } from "./Store/usersData";
+import { getAllMCPs } from "./Store/mcpsData";
+import { getAllVehicles } from "./Store/vehicleData";
+import { getAllTasks } from "./Store/tasksList";
 import EmployeePage from "./pages/EmployeePage";
 
 const libraries = ["places"];
@@ -18,26 +20,12 @@ function App() {
     libraries,
   });
 
-  fetch("http://127.0.0.1:8080/api/v1/users")
-    .then((response) => response.json())
-    .then((users) => {
-      const allUsers = users.data.results;
-      dispatch(usersAction.storeUsers(allUsers));
-    });
-
-  fetch("http://127.0.0.1:8080/api/v1/tasks/vehicles")
-    .then((response) => response.json())
-    .then((vehicles) => {
-      const allVehicles = vehicles.data;
-      dispatch(vehiclesAction.storeVehicles(allVehicles));
-    });
-
-  fetch("http://127.0.0.1:8080/api/v1/tasks/mcps")
-    .then((response) => response.json())
-    .then((mcps) => {
-      const allMCPs = mcps.data;
-      dispatch(MCPssAction.storeMCPs(allMCPs));
-    });
+  useEffect(() => {
+    dispatch(getAllUsers());
+    dispatch(getAllVehicles());
+    dispatch(getAllMCPs());
+    dispatch(getAllTasks());
+  }, [dispatch]);
 
   return (
     <Routes>

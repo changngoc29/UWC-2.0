@@ -1,12 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const initialUserState = {
-  allUsers: [],
-};
+export const getAllUsers = createAsyncThunk("users/getAllUsers", async () => {
+  const res = await fetch("http://127.0.0.1:8080/api/v1/users")
+    .then((response) => response.json())
+    .then((users) => users.data.results);
+
+  return res;
+});
 
 const usersSlice = createSlice({
   name: "users",
-  initialState: initialUserState,
+  initialState: {
+    allUsers: [],
+  },
   reducers: {
     storeUsers(state, action) {
       state.allUsers = action.payload;
@@ -16,20 +22,12 @@ const usersSlice = createSlice({
         (user) => user.id === action.payload.id
       );
       state.allUsers[userIndex].status = action.payload.status;
-
-      const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: state.allUsers[userIndex].id,
-          status: state.allUsers[userIndex].status,
-        }),
-      };
-
-      fetch("http://127.0.0.1:8080/api/v1/users", requestOptions)
-        .then((response) => response.json())
-        .then((data) => console.log(data));
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getAllUsers.fulfilled, (state, action) => {
+      state.allUsers = action.payload;
+    });
   },
 });
 

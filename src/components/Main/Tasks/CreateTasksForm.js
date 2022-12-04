@@ -85,34 +85,18 @@ const CreateTasksForm = (props) => {
     }
 
     let taskInfo = {
-      MCP: {
-        MCPLocation:
-          taskFormRole === "collector"
-            ? MCPsFull[MCPsOptionValue].location
-            : MCPsEmpty[MCPsOptionValue].location,
-        ID:
-          taskFormRole === "collector"
-            ? MCPsFull[MCPsOptionValue].id
-            : MCPsEmpty[MCPsOptionValue].id,
-      },
-      employee: {
-        role: taskFormRole,
-        fullName:
-          taskFormRole === "collector"
-            ? availableCollector[employeeOptionValue].name
-            : availableJanitor[employeeOptionValue].name,
-        ID:
-          taskFormRole === "collector"
-            ? availableCollector[employeeOptionValue].id
-            : availableJanitor[employeeOptionValue].id,
-      },
-      vehicle: {
-        name: availableVehicles[vehicleOptionValue]?.name,
-        licensePalate: availableVehicles[vehicleOptionValue]?.liscense,
-        ID: availableVehicles[vehicleOptionValue]?.id,
-      },
-      status: "Pending",
       id: Math.random(),
+      status: "pending",
+      type: taskFormRole,
+      employeeId:
+        taskFormRole === "collector"
+          ? availableCollector[employeeOptionValue].id
+          : availableJanitor[employeeOptionValue].id,
+      mcpId:
+        taskFormRole === "collector"
+          ? MCPsFull[MCPsOptionValue].id
+          : MCPsEmpty[MCPsOptionValue].id,
+      vehicleId: availableVehicles[vehicleOptionValue]?.id,
     };
 
     props.onCreateTask(taskInfo);

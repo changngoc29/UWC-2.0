@@ -17,6 +17,9 @@ const MCPs = () => {
 
   return (
     <div className="mt-[6rem] w-[90%] md:w-[85%] mx-auto">
+      <h1 className="font-semibold text-[2rem] text-center mb-4">
+        Major Collecting Points
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 bg-gray-50 rounded-md shadow">
         <div className="m-2">
           <h1 className="p-2 tracking-wider mb-2 font-bold text-lg border-t-2 border-blue-500 text-blue-500">

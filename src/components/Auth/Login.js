@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import loginBg from "../../assets/img/login-background.jpg";
 import google from "../../assets/img/google.png";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,48 @@ import { faLock, faEnvelope, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const [roleLoginForm, setRoleLoginForm] = useState("BACKOFFICER");
+  const [hiddenPassword, setHiddenPassword] = useState(true);
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+
   const navigate = useNavigate();
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (roleLoginForm === "BACKOFFICER") navigate("/backofficer");
-    else if (roleLoginForm === "EMPLOYEE") navigate("/employee");
+    const userAuth = {
+      email: emailInputRef.current.value,
+      password: passwordInputRef.current.value,
+    };
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userAuth),
+    };
+
+    const userAuthCredentials = await fetch(
+      "http://127.0.0.1:8080/api/v1/users/login",
+      requestOptions
+    ).then((response) => response.json());
+
+    if (userAuthCredentials.status === "fail") {
+      alert("Incorrect email or password");
+      return;
+    }
+
+    if (
+      userAuthCredentials.role === "backofficer" &&
+      roleLoginForm === "BACKOFFICER"
+    )
+      navigate("/backofficer");
+    else if (
+      (userAuthCredentials.role === "janitor" || "collector") &&
+      roleLoginForm === "EMPLOYEE"
+    )
+      navigate("/employee");
+    else {
+      alert("Incorrect email or password");
+    }
   };
 
   return (
@@ -30,6 +66,7 @@ const Login = () => {
             icon={faEnvelope}
           />
           <input
+            ref={emailInputRef}
             type="email"
             placeholder="Email"
             className="focus:outline-none py-2 pr-3 w-full"
@@ -42,12 +79,16 @@ const Login = () => {
             icon={faLock}
           />
           <input
-            type="password"
+            ref={passwordInputRef}
+            type={hiddenPassword ? "password" : "text"}
             placeholder="Password"
             className="focus:outline-none py-2 pr-3 w-full"
             required
           />
           <FontAwesomeIcon
+            onClick={() => {
+              setHiddenPassword((prev) => !prev);
+            }}
             icon={faEye}
             className="px-2 h-[15px] text-slate-400 hover:cursor-pointer"
           />

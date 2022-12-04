@@ -14,7 +14,6 @@ const Tasks = () => {
   const [createTask, setCreateTask] = useState(false);
   const dispatch = useDispatch();
   const allTasks = useSelector((state) => state.tasks.allTasks);
-  console.log(allTasks);
 
   const closeModalHandler = () => {
     setCreateTask(false);
@@ -26,6 +25,17 @@ const Tasks = () => {
 
   const createTaskHandler = (taskInfo) => {
     dispatch(tasksAction.addTasks(taskInfo));
+
+    //send post request to sever
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(taskInfo),
+    };
+
+    fetch("http://127.0.0.1:8080/api/v1/tasks", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log(data));
   };
 
   const deleteTaskHandler = (deleteTask) => {
@@ -33,22 +43,22 @@ const Tasks = () => {
 
     dispatch(
       usersAction.updateUserStatus({
-        id: deleteTask.employee.ID,
+        id: deleteTask.employeeId,
         status: "Available",
       })
     );
 
-    if (deleteTask.employee.role === "janitor") {
+    if (deleteTask.type === "janitor") {
       dispatch(
-        MCPssAction.updateMCPsStatus({ id: deleteTask.MCP.ID, status: "empty" })
+        MCPssAction.updateMCPsStatus({ id: deleteTask.mcpId, status: "empty" })
       );
-    } else if (deleteTask.employee.role === "collector") {
+    } else if (deleteTask.type === "collector") {
       dispatch(
-        MCPssAction.updateMCPsStatus({ id: deleteTask.MCP.ID, status: "full" })
+        MCPssAction.updateMCPsStatus({ id: deleteTask.mcpId, status: "full" })
       );
       dispatch(
         vehiclesAction.updateVehiclesStatus({
-          id: deleteTask.vehicle.ID,
+          id: deleteTask.vehicleId,
           status: "available",
         })
       );
@@ -57,13 +67,19 @@ const Tasks = () => {
 
   return (
     <Fragment>
-      <div className="mt-[6rem] w-[80%] md:w-[65%] mx-auto p-2 flex justify-between shadow flex-wrap gap-2">
-        <div
-          onClick={openModalHandler}
-          className="w-full md:w-fit text-[#263544] inline-block p-1.5 cursor-pointer border-2 border-[#263544] shadow line-clamp-1"
-        >
-          Add Task
-        </div>
+      <div className="mt-[6rem]">
+        <h1 className="text-center text-[2rem] font-semibold">
+          Task Assignment
+        </h1>
+        <p className="text-[0.8rem] text-slate-500 text-center">
+          Are there any MCPs need to be handled?{" "}
+          <span
+            className="text-black font-bold hover:underline cursor-pointer"
+            onClick={openModalHandler}
+          >
+            New Task
+          </span>
+        </p>
       </div>
       {createTask && (
         <Modal onCloseModal={closeModalHandler}>
@@ -84,7 +100,7 @@ const Tasks = () => {
           );
         })}
       {allTasks.length === 0 && (
-        <div className="text-center mt-20">
+        <div className="text-center mt-16">
           <FontAwesomeIcon
             className="text-slate-400 text-[15rem]"
             icon={faClipboardCheck}

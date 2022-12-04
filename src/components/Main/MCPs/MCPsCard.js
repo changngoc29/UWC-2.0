@@ -5,8 +5,6 @@ import Modal from "../../UI/Modal";
 import { useSelector } from "react-redux";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 
-const center = { lat: 10.7734137588, lng: 106.659731458 };
-
 const MCPsCard = (props) => {
   const { data } = props;
   const [isShowMCPInfo, setIsShowMCPInfo] = useState(false);
@@ -14,6 +12,8 @@ const MCPsCard = (props) => {
   const employeeInCharge = allUsers.find(
     (user) => user.id === data["employee-id"]
   );
+
+  const center = data["geo-location"];
 
   return (
     <Fragment>

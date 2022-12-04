@@ -3,27 +3,44 @@ import Modal from "../../UI/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { useSelector } from "react-redux";
 
 const TaskItem = (props) => {
-  const { task } = props;
-  console.log(task);
-  const { MCP, employee, vehicle, status } = task;
-
   const [isShowDetail, setIsShowDetail] = useState(false);
+  const { task } = props;
+  const { employeeId, mcpId, vehicleId, status } = task;
+
+  const employee = useSelector((state) => state.users.allUsers).find(
+    (employee) => employee.id === employeeId
+  );
+  const MCP = useSelector((state) => state.mcps.allMCPs).find(
+    (MCP) => MCP.id === mcpId
+  );
+  const vehicle = useSelector((state) => state.vehicles.allVehicles).find(
+    (vehicle) => vehicle.id === vehicleId
+  );
 
   return (
-    <div className="w-[80%] md:w-[65%] mx-auto mt-3 p-3 shadow border-l-[4px] border-yellow-500">
+    <div
+      className={`w-[80%] md:w-[65%] mx-auto mt-3 p-3 shadow border-l-[4px] ${
+        status === "pending" && "border-yellow-500"
+      } ${status === "finished" && "border-green-500"}`}
+    >
       <div className="flex justify-between">
         <span className="font-bold flex items-end">
           {employee.role.toUpperCase()}
         </span>
-        <p className="tracking-wider text-[0.75rem] font-sans p-1.5 rounded-lg font-bold text-yellow-800 bg-yellow-200 bg-opacity-50">
+        <p
+          className={`tracking-wider text-[0.75rem] font-sans p-1.5 rounded-lg font-bold bg-opacity-50 ${
+            status === "pending" && "text-yellow-800 bg-yellow-200"
+          } ${status === "finished" && "text-green-800 bg-green-200"}`}
+        >
           {status}
         </p>
       </div>
       <p className="text-gray-500 text-sm my-2 line-clamp-1">{`MCP Location: ${
-        MCP.MCPLocation
-      }, Employee Name: ${employee.fullName}, Vehicle: ${
+        MCP.location
+      }, Employee Name: ${employee.name}, Vehicle: ${
         vehicle ? vehicle?.name : "Not Assigned"
       }`}</p>
       <div className="flex justify-between text-sm text-gray-500">
@@ -62,20 +79,20 @@ const TaskItem = (props) => {
               Pending
             </p>
           </div>
-          <p className="py-1">MCP Location: {MCP.MCPLocation}</p>
+          <p className="py-1">MCP Location: {MCP.location}</p>
           <div className="flex flex-wrap justify-between py-1">
-            <p>Employee Name: {employee.fullName}</p>
+            <p>Employee Name: {employee.name}</p>
             <p>
               Employee ID:{" "}
-              <span className="font-bold text-blue-400">{`#${employee.ID}`}</span>
+              <span className="font-bold text-blue-400">{`#${employee.id}`}</span>
             </p>
           </div>
           <div className="flex flex-wrap justify-between py-1">
-            <p>Vehicle Name: {vehicle.name ? vehicle.name : "Not Assigned"}</p>
+            <p>Vehicle Name: {vehicle ? vehicle.name : "Not Assigned"}</p>
             <p>
               License Palate:{" "}
               <span className="font-bold text-blue-400">{`#${
-                vehicle.licensePalate ? vehicle.licensePalate : "NULL"
+                vehicle ? vehicle.liscense : "NULL"
               }`}</span>
             </p>
           </div>
