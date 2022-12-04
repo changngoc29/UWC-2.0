@@ -4,7 +4,7 @@ import google from "../../assets/img/google.png";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faEnvelope, faEye } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { currentUserAction } from "../../Store/CurrentUser";
 
 const Login = () => {
@@ -13,6 +13,10 @@ const Login = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const dispatch = useDispatch();
+
+  const loginStatus = useSelector((state) => state.currentUser.isLogin);
+
+  console.log(loginStatus);
 
   const navigate = useNavigate();
   const submitHandler = async (e) => {
@@ -34,25 +38,22 @@ const Login = () => {
       requestOptions
     ).then((response) => response.json());
 
-    if (userAuthCredentials.status === "fail") {
-      alert("Incorrect email or password");
-      return;
-    }
-
-    dispatch(currentUserAction.login(userAuthCredentials.id));
-
-    if (
-      userAuthCredentials.role === "backofficer" &&
-      roleLoginForm === "BACKOFFICER"
-    )
-      navigate("/backofficer");
-    else if (
-      (userAuthCredentials.role === "janitor" || "collector") &&
-      roleLoginForm === "EMPLOYEE"
-    )
-      navigate("/employee");
-    else {
-      alert("Incorrect email or password");
+    if (userAuthCredentials.status === "success") {
+      if (
+        userAuthCredentials.role === "backofficer" &&
+        roleLoginForm === "BACKOFFICER"
+      ) {
+        dispatch(currentUserAction.login(userAuthCredentials.id));
+        navigate("/backofficer");
+      } else if (
+        (userAuthCredentials.role === "janitor" || "collector") &&
+        roleLoginForm === "EMPLOYEE"
+      ) {
+        dispatch(currentUserAction.login(userAuthCredentials.id));
+        navigate("/employee");
+      } else {
+        alert("Incorrect email or password");
+      }
     }
   };
 

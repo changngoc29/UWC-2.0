@@ -7,8 +7,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import BreadCrumb from "./BreadCrumb";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { currentUserAction } from "../../../Store/CurrentUser";
 
 const Header = (props) => {
+  const dispatch = useDispatch();
+
   return (
     <div className="h-[4rem] bg-white shadow-md fixed top-0 right-0 left-[6rem] lg:left-[16rem] z-10">
       <div className="h-full flex items-center w-[90%] lg:w-[85%] mx-auto justify-between">
@@ -30,6 +34,9 @@ const Header = (props) => {
           </span>
           <Link to="/login">
             <FontAwesomeIcon
+              onClick={() => {
+                dispatch(currentUserAction.logout());
+              }}
               icon={faRightFromBracket}
               className="text-[1.5rem] text-slate-500 "
             />
