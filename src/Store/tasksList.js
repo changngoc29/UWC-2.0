@@ -20,6 +20,13 @@ const tasksSlice = createSlice({
         (task) => task.id !== action.payload
       );
     },
+    updateTask(state, action) {
+      const taskIndex = state.allTasks.findIndex(
+        (task) => task.id === action.payload
+      );
+      console.log(taskIndex);
+      state.allTasks[taskIndex].status = "finished";
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllTasks.fulfilled, (state, action) => {

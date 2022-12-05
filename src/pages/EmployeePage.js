@@ -1,8 +1,11 @@
 import React, { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
 import ColumnNavbar from "../components/Frame/Column_Nav/ColumnNavbar";
 import { employeeNavItems } from "../DummyData";
 import Header from "../components/Frame/Header/Header";
-import Tasks from "../components/Main/Employee/Tasks/Tasks";
+import TaskInfo from "../components/Main/Employee/Tasks/TaskInfo";
+import NoTaskFound from "../components/Main/Employee/Tasks/NoTaskFound";
+import OptimizedRoutes from "../components/Map/OptimizedRoutes";
 
 const EmployeePage = () => {
   const [navItems, setNavItems] = useState([...employeeNavItems]);
@@ -10,6 +13,10 @@ const EmployeePage = () => {
   const updateNavItemsStatusHandler = (newNavItems) => {
     setNavItems(newNavItems);
   };
+
+  const userID = useSelector((state) => state.currentUser.id);
+  const allTasks = useSelector((state) => state.tasks.allTasks);
+  const userTask = allTasks.find((task) => task.employeeId === userID);
 
   return (
     <Fragment>
@@ -31,7 +38,13 @@ const EmployeePage = () => {
 
           if (navItem.isActive === true) {
             if (navItem.name === "My tasks") {
-              content = <Tasks key={index} />;
+              if (userTask) {
+                content = <TaskInfo key={index} userTask={userTask} />;
+              } else {
+                content = <NoTaskFound key={index} />;
+              }
+            } else if (navItem.name === "Optimized Routes") {
+              content = <OptimizedRoutes key={index} />;
             }
           }
           return content;

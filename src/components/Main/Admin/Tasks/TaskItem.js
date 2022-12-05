@@ -75,8 +75,14 @@ const TaskItem = (props) => {
                 {employee.role.toUpperCase()}
               </span>
             </p>
-            <p className="tracking-wider text-[0.75rem] font-sans p-1.5 rounded-lg font-bold text-yellow-800 bg-yellow-200 bg-opacity-50">
-              Pending
+            <p
+              className={`tracking-wider text-[0.75rem] font-sans p-1.5 rounded-lg font-bold ${
+                status === "pending" && "text-yellow-800 bg-yellow-200"
+              } ${
+                status === "finished" && "text-green-800 bg-green-200"
+              } bg-opacity-50`}
+            >
+              {status}
             </p>
           </div>
           <p className="py-1">MCP Location: {MCP.location}</p>

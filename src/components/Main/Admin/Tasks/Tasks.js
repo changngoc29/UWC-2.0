@@ -49,13 +49,35 @@ const Tasks = () => {
     );
 
     if (deleteTask.type === "janitor") {
-      dispatch(
-        MCPssAction.updateMCPsStatus({ id: deleteTask.mcpId, status: "empty" })
-      );
+      if (deleteTask.status === "pending") {
+        dispatch(
+          MCPssAction.updateMCPsStatus({
+            id: deleteTask.mcpId,
+            status: "empty",
+          })
+        );
+      } else if (deleteTask.status === "finished") {
+        dispatch(
+          MCPssAction.updateMCPsStatus({ id: deleteTask.mcpId, status: "full" })
+        );
+      }
     } else if (deleteTask.type === "collector") {
-      dispatch(
-        MCPssAction.updateMCPsStatus({ id: deleteTask.mcpId, status: "full" })
-      );
+      if (deleteTask.status === "pending") {
+        dispatch(
+          MCPssAction.updateMCPsStatus({
+            id: deleteTask.mcpId,
+            status: "full",
+          })
+        );
+      } else if (deleteTask.status === "finished") {
+        dispatch(
+          MCPssAction.updateMCPsStatus({
+            id: deleteTask.mcpId,
+            status: "empty",
+          })
+        );
+      }
+
       dispatch(
         vehiclesAction.updateVehiclesStatus({
           id: deleteTask.vehicleId,
@@ -63,6 +85,13 @@ const Tasks = () => {
         })
       );
     }
+
+    //send deleteTask request to sever
+    fetch("http://127.0.0.1:8080/api/v1/tasks/delete/" + deleteTask.id, {
+      method: "DELETE",
+    }).then((response) => {
+      console.log("success");
+    });
   };
 
   return (
